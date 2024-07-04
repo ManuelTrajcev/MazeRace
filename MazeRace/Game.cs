@@ -17,14 +17,15 @@ namespace MazeRace
         public int PCSpeed;
         public List<Point> coins = new List<Point>();
         public int[,] maze;
-        public bool isDisabled = false;
+        public bool isDisabled;
         public static MazeGenerator MazeGenerator = new MazeGenerator();
-
+        public event Action OnLevelCompleted;
         public Game()
         {
             PCSpeed = 1050;
             Player = new Player(new Point(1, 1));
             PC = new Player(new Point(1, 1));
+            isDisabled = true;
             Level = 0;
         }
 
@@ -50,12 +51,13 @@ namespace MazeRace
                     DialogResult result = MessageBox.Show("PC reached the finish line!", "Finish Line", MessageBoxButtons.OK);
                     if (result == DialogResult.OK)
                     {
-                        StartNextLevel();
+                        OnLevelCompleted?.Invoke();
                         return;
                     }
-                    StartNextLevel();
+
                 }
-                PC.Move(newPosition);   
+                if (!isDisabled)
+                    PC.Move(newPosition);
             }
             else
             {
@@ -68,31 +70,30 @@ namespace MazeRace
                 else if (maze[newPosition.Y, newPosition.X] == 3)
                 {
 
-                   Player.UpdateScore(10);
+                    Player.UpdateScore(10);
                     Player.Move(newPosition);
-                  
                     isDisabled = true;
                     DialogResult result = MessageBox.Show("Player reached the finish line!", "Finish Line", MessageBoxButtons.OK);
                     if (result == DialogResult.OK)
                     {
-                        StartNextLevel();
+                        OnLevelCompleted?.Invoke();
                         return;
                     }
 
                 }
-                Player.Move(newPosition);
-            
+                if (!isDisabled)
+                    Player.Move(newPosition);
             }
         }
 
         public void StartNextLevel()
         {
-           Level++;
-            
-           PC.setPosition(new Point(1, 1));
-           Player.setPosition(new Point(1, 1));
+            Level++;
+
+            PC.setPosition(new Point(1, 1));
+            Player.setPosition(new Point(1, 1));
             coins = new List<Point>();
-           maze = MazeGenerator.GenerateMaze(Level);
+            maze = MazeGenerator.GenerateMaze(Level);
             for (int y = 0; y < maze.GetLength(0); y++)
             {
                 for (int x = 0; x < maze.GetLength(1); x++)

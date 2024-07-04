@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.ssScore = new System.Windows.Forms.ToolStripStatusLabel();
+            this.timerCounter = new System.Windows.Forms.Timer(this.components);
+            this.lblCountdown = new System.Windows.Forms.Label();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,11 +53,27 @@
             this.ssScore.Size = new System.Drawing.Size(179, 25);
             this.ssScore.Text = "toolStripStatusLabel1";
             // 
+            // timerCounter
+            // 
+            this.timerCounter.Interval = 1000;
+            this.timerCounter.Tick += new System.EventHandler(this.timerCounter_Tick);
+            // 
+            // lblCountdown
+            // 
+            this.lblCountdown.AutoSize = true;
+            this.lblCountdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCountdown.ForeColor = System.Drawing.Color.Red;
+            this.lblCountdown.Location = new System.Drawing.Point(293, 165);
+            this.lblCountdown.Name = "lblCountdown";
+            this.lblCountdown.Size = new System.Drawing.Size(0, 69);
+            this.lblCountdown.TabIndex = 1;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.lblCountdown);
             this.Controls.Add(this.statusStrip);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -71,6 +90,8 @@
 
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel ssScore;
+        private System.Windows.Forms.Timer timerCounter;
+        private System.Windows.Forms.Label lblCountdown;
     }
 }
 

@@ -10,9 +10,10 @@ using System.Windows.Forms;
 namespace MazeRace
 {
     public partial class Form1 : Form
-    { 
+    {
+        private int Countdown;
         private Timer gameTimer;
-        private bool isDisabled = false;
+        private bool isDisabled = true;
         private static MazeGenerator MazeGenerator = new MazeGenerator();
         private Game Game;
         public Form1()
@@ -21,7 +22,9 @@ namespace MazeRace
             this.DoubleBuffered = true;
             this.Height = 600;
             this.Width = 600;
+            Countdown = 4;
             Game = new Game();
+            Game.OnLevelCompleted += StartNextLevel;
             ssScore.Text = $"Player: {Game.Player.Score}    Computer: {Game.PC.Score}";
             gameTimer = new Timer();
             StartNextLevel();
@@ -54,26 +57,30 @@ namespace MazeRace
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            Point newPosition = Game.Player.Position;
-            switch (e.KeyCode)
+            if (!isDisabled)
             {
-                case Keys.W:
-                    newPosition.Y -= 1;
-                    break;
-                case Keys.A:
-                    newPosition.X -= 1;
-                    break;
-                case Keys.S:
-                    newPosition.Y += 1;
-                    break;
-                case Keys.D:
-                    newPosition.X += 1;
-                    break;
-            }
+                Point newPosition = Game.Player.Position;
+                switch (e.KeyCode)
+                {
+                    case Keys.W:
+                        newPosition.Y -= 1;
+                        break;
+                    case Keys.A:
+                        newPosition.X -= 1;
+                        break;
+                    case Keys.S:
+                        newPosition.Y += 1;
+                        break;
+                    case Keys.D:
+                        newPosition.X += 1;
+                        break;
+                }
 
-            Game.checkMovement(newPosition, false);
-            UpdateScores();
-            Invalidate();
+                Game.checkMovement(newPosition, false);
+                UpdateScores();
+                Invalidate();
+            }
+           
         }
 
         private void checkMovement(Point newPosition, bool isPC)
@@ -83,15 +90,16 @@ namespace MazeRace
                 Invalidate();
         }
 
-        private void StartNextLevel()
+        public void StartNextLevel()
         {
-            Game.StartNextLevel();
+            gameTimer.Stop();
+            isDisabled = true;
+            timerCounter.Start();
             gameTimer = new Timer();
-            isDisabled = false;
+         
             Game.PCSpeed -= 50;
             gameTimer.Interval = Game.PCSpeed;
-            gameTimer.Tick += gameTimer_Tick;
-            gameTimer.Start(); 
+            Game.StartNextLevel();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -152,6 +160,25 @@ namespace MazeRace
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void timerCounter_Tick(object sender, EventArgs e)
+        {
+            Countdown--;
+            lblCountdown.Text = Countdown.ToString();
+            Game.isDisabled = true;
+            if (Countdown == 0)
+            {
+                lblCountdown.Text = "";
+                Countdown = 4;
+                timerCounter.Stop();
+                Game.isDisabled = false;
+                isDisabled = false;
+
+                gameTimer.Tick += gameTimer_Tick;
+                gameTimer.Start();
+            }
+            
         }
     }
 }
