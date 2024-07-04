@@ -9,7 +9,7 @@ namespace MazeRace
 {
     public class Player
     {
-        public Point Position { get; set; }
+        public Point Position;
         public int Score { get; set; }
 
         public Player(Point position)
@@ -24,6 +24,11 @@ namespace MazeRace
         public void UpdateScore(int score)
         {
             Score += score;
+        }
+
+        public void setPosition(Point newPosition)
+        {
+            Position = newPosition;
         }
     }
 }

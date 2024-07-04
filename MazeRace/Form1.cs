@@ -5,8 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MazeRace
@@ -16,116 +14,55 @@ namespace MazeRace
         private Player Player;
         private Player PC;
         private Point Finish;
+        private int Level;
+        private int PCSpeed;
+        List<Point> coins = new List<Point>();
         private int[,] maze;
+        private Timer gameTimer;
+        private bool isDisabled = false;
+        private static MazeGenerator MazeGenerator = new MazeGenerator();
         public Form1()
         {
-            this.DoubleBuffered = true;
             InitializeComponent();
-            maze = new int[,]
-             {
-                { 1, 1, 1, 1, 1 },
-                { 1, 0, 2, 0, 1 },
-                { 1, 0, 1, 3, 1 },
-                { 1, 2, 0, 0, 1 },
-                { 1, 1, 1, 1, 1 }
-             };
+            this.DoubleBuffered = true;
+            this.Height = 600;
+            this.Width = 600;
+            PCSpeed = 1050;
             Player = new Player(new Point(1, 1));
-            PC = new Player(new Point(3, 3));
-            Finish = new Point(3, 2);
-            System.Windows.Forms.Timer gameTimer = new System.Windows.Forms.Timer();
-            gameTimer.Interval = 1000;
-            gameTimer.Tick += gameTimer_Tick;
-            gameTimer.Start();
+            PC = new Player(new Point(1, 1));
+            Level = 0;
             ssScore.Text = $"Player: {Player.Score}    Computer: {PC.Score}";
+            gameTimer = new Timer();
+            StartNextLevel();
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            Point bestMove = PC.Position;
-            int bestValue = int.MinValue;
+            List<Point> pathToFinish = MazeSolver.FindShortestPath(maze, PC.Position, Finish);
 
-            List<Point> possibleMoves = GetPossibleMoves(PC.Position);
-            foreach (var move in possibleMoves)
+            List<Point> path = pathToFinish;
+            if (coins.Count > 0)
             {
-                int moveValue = Minimax(move, 3, false, int.MinValue, int.MaxValue);
-                if (moveValue > bestValue)
+                List<Point> pathToClosestCoin = MazeSolver.FindShortestPath(maze, PC.Position, coins[0]);
+                coins.ForEach(c =>
                 {
-                    bestValue = moveValue;
-                    bestMove = move;
-                }
+                    if (MazeSolver.FindShortestPath(maze, PC.Position, c).Count < pathToClosestCoin.Count)
+                    {
+                        pathToClosestCoin = MazeSolver.FindShortestPath(maze, PC.Position, c);
+                    }
+                });
+                path = pathToFinish.Count > pathToClosestCoin.Count && pathToClosestCoin.Count > 1 ? pathToClosestCoin : pathToFinish;
+
             }
 
-            checkMovement(bestMove, true);
+
+
+            if (path != null && path.Count > 1)
+            {
+                Point bestMove = path[1];
+                checkMovement(bestMove, true);
+            }
             Invalidate();
-        }
-
-        private List<Point> GetPossibleMoves(Point position)
-        {
-            List<Point> moves = new List<Point>();
-            Point[] directions = new Point[]
-            {
-                new Point(0, 1),  // Down
-                new Point(-1, 0), // Left
-                new Point(-1, 0), // Left
-                new Point(-1, 0), // Left
-                new Point(1, 0)   // Right
-            };
-
-            foreach (var direction in directions)
-            {
-                Point newPos = new Point(position.X + direction.X, position.Y + direction.Y);
-                if (maze[newPos.Y, newPos.X] != 1)
-                {
-                    moves.Add(newPos);
-                }
-            }
-
-            return moves;
-        }
-
-        private int Evaluate(Point position)
-        {
-            return Math.Abs(position.X - Finish.X) + Math.Abs(position.Y - Finish.Y);   // Manhattan distance 
-        }
-
-        private int Minimax(Point position, int depth, bool isMaximizingPlayer, int alpha, int beta)
-        {
-            if (depth == 0 || maze[position.Y, position.X] == 3)
-            {
-                return Evaluate(position);
-            }
-
-            List<Point> possibleMoves = GetPossibleMoves(position);
-            if (isMaximizingPlayer)
-            {
-                int maxEval = int.MinValue;
-                foreach (var move in possibleMoves)
-                {
-                    int eval = Minimax(move, depth - 1, false, alpha, beta);
-                    maxEval = Math.Max(maxEval, eval);
-                    alpha = Math.Max(alpha, eval);
-                    if (beta <= alpha)
-                    {
-                        break;
-                    }
-                }
-                return maxEval;
-            }
-            else
-            {
-                int minEval = int.MaxValue;
-                foreach (var move in possibleMoves)
-                {
-                    int eval = Minimax(move, depth - 1, true, alpha, beta);
-                    minEval = Math.Min(minEval, eval);
-                    beta = Math.Min(beta, eval);
-                    if (beta <= alpha)
-                    {
-                        break;
-                    }
-                }
-                return minEval;
-            }
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -153,7 +90,7 @@ namespace MazeRace
 
         private void checkMovement(Point newPosition, bool isPC)
         {
-            if (maze[newPosition.Y, newPosition.X] == 1)
+            if (maze[newPosition.Y, newPosition.X] == 1 || isDisabled)
             {
                 return;
             }
@@ -163,13 +100,21 @@ namespace MazeRace
                 {
                     PC.UpdateScore(10);
                     maze[newPosition.Y, newPosition.X] = 0;
+                    coins.Remove(newPosition);
                 }
                 else if (maze[newPosition.Y, newPosition.X] == 3)
                 {
                     PC.UpdateScore(10);
                     PC.Move(newPosition);
                     Invalidate();
-                    MessageBox.Show("You reached the finish line! Your score: " + Player.Score);
+                    isDisabled = true;
+                    DialogResult result = MessageBox.Show("PC reached the finish line!", "Finish Line", MessageBoxButtons.OK);
+                    if (result == DialogResult.OK)
+                    {
+                        StartNextLevel();
+                        return;
+                    }
+                    StartNextLevel();
                 }
                 PC.Move(newPosition);
                 UpdateScores();
@@ -181,6 +126,7 @@ namespace MazeRace
                 {
                     Player.UpdateScore(10);
                     maze[newPosition.Y, newPosition.X] = 0;
+                    coins.Remove(newPosition);
                 }
                 else if (maze[newPosition.Y, newPosition.X] == 3)
                 {
@@ -188,12 +134,50 @@ namespace MazeRace
                     Player.UpdateScore(10);
                     Player.Move(newPosition);
                     Invalidate();
-                    MessageBox.Show("You reached the finish line! Your score: " + Player.Score);
+                    isDisabled = true;
+                    DialogResult result = MessageBox.Show("Player reached the finish line!", "Finish Line", MessageBoxButtons.OK);
+                    if (result == DialogResult.OK)
+                    {
+                        StartNextLevel();
+                        return;
+                    }
+
                 }
                 Player.Move(newPosition);
                 UpdateScores();
                 Invalidate();
             }
+        }
+
+        private void StartNextLevel()
+        {
+            Level++;
+            gameTimer.Stop();
+            PC.setPosition(new Point(1, 1));
+            Player.setPosition(new Point(1, 1));
+            coins = new List<Point>();
+            maze = MazeGenerator.GenerateMaze(Level);
+            for (int y = 0; y < maze.GetLength(0); y++)
+            {
+                for (int x = 0; x < maze.GetLength(1); x++)
+                {
+                    if (maze[y, x] == 2)
+                    {
+                        coins.Add(new Point(x, y));
+                    }
+                    else if (maze[y, x] == 3)
+                    {
+                        Finish = new Point(x, y);
+                    }
+                }
+            }
+            gameTimer = new Timer();
+            isDisabled = false;
+            PCSpeed -= 50;
+            gameTimer.Interval = PCSpeed;
+            gameTimer.Tick += gameTimer_Tick;
+            gameTimer.Start();
+            
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -202,6 +186,13 @@ namespace MazeRace
             Graphics g = e.Graphics;
 
             int cellSize = 20;
+            int mazeWidth = maze.GetLength(1) * cellSize;
+            int mazeHeight = maze.GetLength(0) * cellSize;
+
+            // Calculate offsets to center the maze
+            int offsetX = (ClientSize.Width - mazeWidth) / 2;
+            int offsetY = (ClientSize.Height - mazeHeight) / 2;
+
             for (int y = 0; y < maze.GetLength(0); y++)
             {
                 for (int x = 0; x < maze.GetLength(1); x++)
@@ -210,26 +201,33 @@ namespace MazeRace
                     switch (maze[y, x])
                     {
                         case 1:
-                            brush = Brushes.Black;  //Wall
+                            brush = Brushes.Black;  // Wall
                             break;
                         case 2:
-                            brush = Brushes.Gold;   //Coin
+                            brush = Brushes.Gold;   // Coin
                             break;
                         case 3:
-                            brush = Brushes.Green;  //Finnish
+                            brush = Brushes.Green;  // Finish
                             break;
                         default:
-                            brush = Brushes.White;  //Path
+                            brush = Brushes.White;  // Path
                             break;
                     }
-                    g.FillRectangle(brush, x * cellSize, y * cellSize, cellSize, cellSize);
-                    g.DrawRectangle(Pens.Black, x * cellSize, y * cellSize, cellSize, cellSize);
+                    int drawX = x * cellSize + offsetX;
+                    int drawY = y * cellSize + offsetY;
+                    g.FillRectangle(brush, drawX, drawY, cellSize, cellSize);
+                    g.DrawRectangle(Pens.Black, drawX, drawY, cellSize, cellSize);
                 }
             }
 
-            // Players
-            g.FillEllipse(Brushes.Blue, Player.Position.X * cellSize, Player.Position.Y * cellSize, cellSize, cellSize);
-            g.FillEllipse(Brushes.Red, PC.Position.X * cellSize, PC.Position.Y * cellSize, cellSize, cellSize);
+            // Draw players
+            int playerDrawX = Player.Position.X * cellSize + offsetX;
+            int playerDrawY = Player.Position.Y * cellSize + offsetY;
+            g.FillEllipse(Brushes.Blue, playerDrawX, playerDrawY, cellSize, cellSize);
+
+            int pcDrawX = PC.Position.X * cellSize + offsetX;
+            int pcDrawY = PC.Position.Y * cellSize + offsetY;
+            g.FillEllipse(Brushes.Red, pcDrawX, pcDrawY, cellSize, cellSize);
         }
 
         private void UpdateScores()
