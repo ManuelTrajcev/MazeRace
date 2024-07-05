@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
 
@@ -11,23 +15,54 @@ namespace MazeRace
 {
     public partial class Form1 : Form
     {
+        private PrivateFontCollection arcadeFontCollection;
         private int Countdown;
         private Timer gameTimer;
         private bool isDisabled = true;
         private static MazeGenerator MazeGenerator = new MazeGenerator();
-        private Game Game;
+        private Game Game = null;
+        public int Highscore = 0;
         public Form1()
         {
             InitializeComponent();
+            //            LoadArcadeFont();
+            //            ApplyArcadeFont(this.Controls);
+
+            int screenWidth = Screen.PrimaryScreen.Bounds.Width;
+            int screenHeight = Screen.PrimaryScreen.Bounds.Height;
+            int formWidth = this.Width;
+            int formHeight = this.Height;
+
+            int posX = (screenWidth - formWidth) / 2;
+            int posY = (screenHeight - formHeight) / 4;
+
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new Point(posX, posY);
+
             this.DoubleBuffered = true;
             this.Height = 600;
             this.Width = 600;
-            Countdown = 4;
-            Game = new Game();
-            Game.OnLevelCompleted += StartNextLevel;
-            ssScore.Text = $"Player: {Game.Player.Score}    Computer: {Game.PC.Score}";
-            gameTimer = new Timer();
-            StartNextLevel();
+            AdjustPanel();
+        }
+
+        private void AdjustPanel()
+        {
+            panelStartMenu.Width = this.Width;
+            panelStartMenu.Height = this.Height;
+            panelStartMenu.Left = 0;
+            panelStartMenu.Top = 0;
+            lblTitle.Left = (panelStartMenu.Width - lblTitle.Width) / 2;
+            btnNewGame.Left = (panelStartMenu.Width - btnNewGame.Width) / 2;
+            lblCountdown.BackColor = Color.Transparent;
+            lblCountdown.Top = (this.Height - lblCountdown.Height) / 2;
+            lblCountdown.Left = (this.Width - lblCountdown.Height) / 2;
+            lblLevel.Left = (this.Width - lblLevel.Width) / 2;
+            lblLevel.Top = 20;
+            ssScore.Width = this.Width;
+            ssScore.Left = (this.Width - ssScore.Width) / 2;
+            ssScore.Top = this.Height - 3 * ssScore.Height;
+            lblHighScore.Top = this.Height - (int)(4.5 * ssScore.Height);
+            lblHighScore.Left = (this.Width - lblHighScore.Width) / 2;
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
@@ -80,30 +115,54 @@ namespace MazeRace
                 UpdateScores();
                 Invalidate();
             }
-           
+
         }
 
         private void checkMovement(Point newPosition, bool isPC)
         {
-                Game.Player.Move(newPosition);
-                UpdateScores();
-                Invalidate();
+            Game.Player.Move(newPosition);
+            UpdateScores();
+            Invalidate();
         }
 
         public void StartNextLevel()
         {
+            if (Game.Player.Score > Highscore)
+            {
+                Highscore = Game.Player.Score;
+            }
+            lblHighScore.Text = $"Highscore: {Highscore}";
             gameTimer.Stop();
             isDisabled = true;
             timerCounter.Start();
             gameTimer = new Timer();
-         
-            Game.PCSpeed -= 50;
+            lblLevel.Text = $"Level {Game.Level}";
+            Game.PCSpeed -= 75;
             gameTimer.Interval = Game.PCSpeed;
             Game.StartNextLevel();
+            AdjustPanel();
+
+            if (Game.Level == 11)
+            {
+                DialogResult result = MessageBox.Show("You have passed all 10 level! Start new game?", "Geme Over", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    StartNewGame();
+                }
+                else
+                {
+                    this.Close();
+                }
+               
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (Game == null)
+            {
+                return;
+            }
             base.OnPaint(e);
             Graphics g = e.Graphics;
 
@@ -178,7 +237,51 @@ namespace MazeRace
                 gameTimer.Tick += gameTimer_Tick;
                 gameTimer.Start();
             }
-            
+
+        }
+        private void LoadArcadeFont()
+        {
+            arcadeFontCollection = new PrivateFontCollection();
+            string fontPath = Path.Combine(Application.StartupPath, "Fonts", "PressStart2P-Regular.ttf");
+
+            MessageBox.Show("Font path: " + fontPath); // Add this line to debug
+
+            arcadeFontCollection.AddFontFile(fontPath);
+
+            Font arcadeFont = new Font(arcadeFontCollection.Families[0], 12, FontStyle.Regular);
+
+            ssScore.Font = new Font(arcadeFont, FontStyle.Regular);
+            lblCountdown.Font = new Font(arcadeFont, FontStyle.Regular);
+            btnNewGame.Font = new Font(arcadeFont, FontStyle.Regular);
+        }
+
+        private void ApplyArcadeFont(Control.ControlCollection controls)
+        {
+            foreach (Control control in controls)
+            {
+                control.Font = new Font(arcadeFontCollection.Families[0], control.Font.Size);
+                if (control.HasChildren)
+                {
+                    ApplyArcadeFont(control.Controls);
+                }
+            }
+        }
+
+        private void btnNewGame_Click(object sender, EventArgs e)
+        {
+            StartNewGame();
+        }
+
+        private void StartNewGame()
+        {
+            Countdown = 4;
+            Game = new Game();
+            Game.OnLevelCompleted += StartNextLevel;
+            ssScore.Text = $"Player: {Game.Player.Score}    Computer: {Game.PC.Score}";
+            gameTimer = new Timer();
+            StartNextLevel();
+            panelStartMenu.Visible = false;
+            this.Focus();
         }
     }
 }

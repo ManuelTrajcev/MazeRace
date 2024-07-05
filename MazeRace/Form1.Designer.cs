@@ -29,29 +29,16 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.ssScore = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerCounter = new System.Windows.Forms.Timer(this.components);
             this.lblCountdown = new System.Windows.Forms.Label();
-            this.statusStrip.SuspendLayout();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.btnNewGame = new System.Windows.Forms.Button();
+            this.panelStartMenu = new System.Windows.Forms.Panel();
+            this.lblLevel = new System.Windows.Forms.Label();
+            this.ssScore = new System.Windows.Forms.Label();
+            this.lblHighScore = new System.Windows.Forms.Label();
+            this.panelStartMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // statusStrip
-            // 
-            this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ssScore});
-            this.statusStrip.Location = new System.Drawing.Point(0, 418);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(800, 32);
-            this.statusStrip.TabIndex = 0;
-            this.statusStrip.Text = "statusStrip1";
-            // 
-            // ssScore
-            // 
-            this.ssScore.Name = "ssScore";
-            this.ssScore.Size = new System.Drawing.Size(179, 25);
-            this.ssScore.Text = "toolStripStatusLabel1";
             // 
             // timerCounter
             // 
@@ -61,37 +48,112 @@
             // lblCountdown
             // 
             this.lblCountdown.AutoSize = true;
-            this.lblCountdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCountdown.Font = new System.Drawing.Font("Press Start 2P", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCountdown.ForeColor = System.Drawing.Color.Red;
-            this.lblCountdown.Location = new System.Drawing.Point(293, 165);
+            this.lblCountdown.Location = new System.Drawing.Point(392, 160);
             this.lblCountdown.Name = "lblCountdown";
-            this.lblCountdown.Size = new System.Drawing.Size(0, 69);
+            this.lblCountdown.Size = new System.Drawing.Size(0, 132);
             this.lblCountdown.TabIndex = 1;
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Font = new System.Drawing.Font("Press Start 2P", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.ForeColor = System.Drawing.Color.GreenYellow;
+            this.lblTitle.Location = new System.Drawing.Point(119, 227);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(575, 82);
+            this.lblTitle.TabIndex = 0;
+            this.lblTitle.Text = "Maze Race";
+            // 
+            // btnNewGame
+            // 
+            this.btnNewGame.Font = new System.Drawing.Font("Press Start 2P", 12F);
+            this.btnNewGame.ForeColor = System.Drawing.Color.Blue;
+            this.btnNewGame.Location = new System.Drawing.Point(258, 364);
+            this.btnNewGame.Name = "btnNewGame";
+            this.btnNewGame.Size = new System.Drawing.Size(308, 58);
+            this.btnNewGame.TabIndex = 1;
+            this.btnNewGame.Text = "Start Game";
+            this.btnNewGame.UseVisualStyleBackColor = true;
+            this.btnNewGame.Click += new System.EventHandler(this.btnNewGame_Click);
+            // 
+            // panelStartMenu
+            // 
+            this.panelStartMenu.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.panelStartMenu.Controls.Add(this.btnNewGame);
+            this.panelStartMenu.Controls.Add(this.lblTitle);
+            this.panelStartMenu.Location = new System.Drawing.Point(12, 9);
+            this.panelStartMenu.Name = "panelStartMenu";
+            this.panelStartMenu.Size = new System.Drawing.Size(776, 543);
+            this.panelStartMenu.TabIndex = 2;
+            // 
+            // lblLevel
+            // 
+            this.lblLevel.AutoSize = true;
+            this.lblLevel.Font = new System.Drawing.Font("Press Start 2P", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLevel.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.lblLevel.Location = new System.Drawing.Point(148, 9);
+            this.lblLevel.Name = "lblLevel";
+            this.lblLevel.Size = new System.Drawing.Size(474, 99);
+            this.lblLevel.TabIndex = 3;
+            this.lblLevel.Text = "label1";
+            // 
+            // ssScore
+            // 
+            this.ssScore.AutoSize = true;
+            this.ssScore.Font = new System.Drawing.Font("Press Start 2P", 15F);
+            this.ssScore.ForeColor = System.Drawing.Color.Red;
+            this.ssScore.Location = new System.Drawing.Point(12, 410);
+            this.ssScore.Name = "ssScore";
+            this.ssScore.Size = new System.Drawing.Size(198, 41);
+            this.ssScore.TabIndex = 4;
+            this.ssScore.Text = "label1";
+            this.ssScore.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblHighScore
+            // 
+            this.lblHighScore.AutoSize = true;
+            this.lblHighScore.BackColor = System.Drawing.Color.Transparent;
+            this.lblHighScore.Font = new System.Drawing.Font("Press Start 2P", 18F);
+            this.lblHighScore.ForeColor = System.Drawing.Color.DarkGreen;
+            this.lblHighScore.Location = new System.Drawing.Point(292, 373);
+            this.lblHighScore.Name = "lblHighScore";
+            this.lblHighScore.Size = new System.Drawing.Size(238, 49);
+            this.lblHighScore.TabIndex = 3;
+            this.lblHighScore.Text = "label1";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Silver;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.panelStartMenu);
             this.Controls.Add(this.lblCountdown);
-            this.Controls.Add(this.statusStrip);
+            this.Controls.Add(this.lblLevel);
+            this.Controls.Add(this.ssScore);
+            this.Controls.Add(this.lblHighScore);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
+            this.panelStartMenu.ResumeLayout(false);
+            this.panelStartMenu.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel ssScore;
         private System.Windows.Forms.Timer timerCounter;
         private System.Windows.Forms.Label lblCountdown;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Button btnNewGame;
+        private System.Windows.Forms.Panel panelStartMenu;
+        private System.Windows.Forms.Label lblLevel;
+        private System.Windows.Forms.Label ssScore;
+        private System.Windows.Forms.Label lblHighScore;
     }
 }
 

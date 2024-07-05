@@ -14,8 +14,8 @@ namespace MazeRace
         private const int path = 0;
         private const int coin = 2;
         private const int finish = 3;
-        private const int width = 9;
-        private const int height = 9;
+        private const int width = 19;
+        private const int height = 19;
 
         public int[,] GenerateMaze(int numberOfCoins)
         {
