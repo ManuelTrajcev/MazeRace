@@ -37,6 +37,9 @@
             this.lblLevel = new System.Windows.Forms.Label();
             this.ssScore = new System.Windows.Forms.Label();
             this.lblHighScore = new System.Windows.Forms.Label();
+            this.lblPause = new System.Windows.Forms.Label();
+            this.lblInfo = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelStartMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,7 +86,7 @@
             this.panelStartMenu.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.panelStartMenu.Controls.Add(this.btnNewGame);
             this.panelStartMenu.Controls.Add(this.lblTitle);
-            this.panelStartMenu.Location = new System.Drawing.Point(12, 9);
+            this.panelStartMenu.Location = new System.Drawing.Point(19, 60);
             this.panelStartMenu.Name = "panelStartMenu";
             this.panelStartMenu.Size = new System.Drawing.Size(776, 543);
             this.panelStartMenu.TabIndex = 2;
@@ -123,20 +126,50 @@
             this.lblHighScore.TabIndex = 3;
             this.lblHighScore.Text = "label1";
             // 
+            // lblPause
+            // 
+            this.lblPause.AutoSize = true;
+            this.lblPause.BackColor = System.Drawing.Color.Transparent;
+            this.lblPause.Font = new System.Drawing.Font("Press Start 2P", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPause.ForeColor = System.Drawing.Color.Red;
+            this.lblPause.Location = new System.Drawing.Point(777, 9);
+            this.lblPause.Name = "lblPause";
+            this.lblPause.Size = new System.Drawing.Size(132, 27);
+            this.lblPause.TabIndex = 5;
+            this.lblPause.Text = "Paused";
+            // 
+            // lblInfo
+            // 
+            this.lblInfo.AutoSize = true;
+            this.lblInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInfo.Image = global::MazeRace.Properties.Resources.info_icon_50_removebg;
+            this.lblInfo.Location = new System.Drawing.Point(13, 9);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(35, 32);
+            this.lblInfo.TabIndex = 6;
+            this.lblInfo.Text = "   ";
+            this.toolTip1.SetToolTip(this.lblInfo, "Controls:\r\nP - Pause\r\nO - Reset\r\nW,A,S,D - move");
+       
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(921, 450);
             this.Controls.Add(this.panelStartMenu);
             this.Controls.Add(this.lblCountdown);
             this.Controls.Add(this.lblLevel);
             this.Controls.Add(this.ssScore);
             this.Controls.Add(this.lblHighScore);
+            this.Controls.Add(this.lblPause);
+            this.Controls.Add(this.lblInfo);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.panelStartMenu.ResumeLayout(false);
             this.panelStartMenu.PerformLayout();
@@ -154,6 +187,9 @@
         private System.Windows.Forms.Label lblLevel;
         private System.Windows.Forms.Label ssScore;
         private System.Windows.Forms.Label lblHighScore;
+        private System.Windows.Forms.Label lblPause;
+        private System.Windows.Forms.Label lblInfo;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

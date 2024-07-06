@@ -6,10 +6,12 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
+using WMPLib;
 
 namespace MazeRace
 {
@@ -18,13 +20,16 @@ namespace MazeRace
         private PrivateFontCollection arcadeFontCollection;
         private int Countdown;
         private Timer gameTimer;
-        private bool isDisabled = true;
+        System.Media.SoundPlayer player = new System.Media.SoundPlayer();
+        private bool isDisabled { get; set; }
         private static MazeGenerator MazeGenerator = new MazeGenerator();
         private Game Game = null;
         public int Highscore = 0;
         public Form1()
         {
             InitializeComponent();
+            StartMusic();
+         
             //            LoadArcadeFont();
             //            ApplyArcadeFont(this.Controls);
 
@@ -32,7 +37,7 @@ namespace MazeRace
             int screenHeight = Screen.PrimaryScreen.Bounds.Height;
             int formWidth = this.Width;
             int formHeight = this.Height;
-
+            isDisabled = true;
             int posX = (screenWidth - formWidth) / 2;
             int posY = (screenHeight - formHeight) / 4;
 
@@ -43,6 +48,13 @@ namespace MazeRace
             this.Height = 600;
             this.Width = 600;
             AdjustPanel();
+        }
+
+        private void StartMusic()
+        {
+            player.SoundLocation = "music.wav";
+            player.LoadCompleted += Player_LoadCompleted;
+            player.LoadAsync();
         }
 
         private void AdjustPanel()
@@ -63,35 +75,48 @@ namespace MazeRace
             ssScore.Top = this.Height - 3 * ssScore.Height;
             lblHighScore.Top = this.Height - (int)(4.5 * ssScore.Height);
             lblHighScore.Left = (this.Width - lblHighScore.Width) / 2;
+            lblPause.Top = 10;
+            lblPause.Left = this.Width - lblPause.Width - 26;
+            lblInfo.Left = 10;
+            lblInfo.Top = 10;
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            List<Point> pathToFinish = MazeSolver.FindShortestPath(Game.maze, Game.PC.Position, Game.Finish);
-            List<Point> path = pathToFinish;
-            if (Game.coins.Count > 0)
+            if (!isDisabled)
             {
-                List<Point> pathToClosestCoin = MazeSolver.FindShortestPath(Game.maze, Game.PC.Position, Game.coins[0]);
-                Game.coins.ForEach(c =>
+                List<Point> pathToFinish = MazeSolver.FindShortestPath(Game.maze, Game.PC.Position, Game.Finish);
+                List<Point> path = pathToFinish;
+                if (Game.coins.Count > 0)
                 {
-                    if (MazeSolver.FindShortestPath(Game.maze, Game.PC.Position, c).Count < pathToClosestCoin.Count)
+                    List<Point> pathToClosestCoin = MazeSolver.FindShortestPath(Game.maze, Game.PC.Position, Game.coins[0]);
+                    Game.coins.ForEach(c =>
                     {
-                        pathToClosestCoin = MazeSolver.FindShortestPath(Game.maze, Game.PC.Position, c);
-                    }
-                });
-                path = pathToFinish.Count > pathToClosestCoin.Count && pathToClosestCoin.Count > 1 ? pathToClosestCoin : pathToFinish;
-            }
+                        if (MazeSolver.FindShortestPath(Game.maze, Game.PC.Position, c).Count < pathToClosestCoin.Count)
+                        {
+                            pathToClosestCoin = MazeSolver.FindShortestPath(Game.maze, Game.PC.Position, c);
+                        }
+                    });
+                    path = pathToFinish.Count > pathToClosestCoin.Count && pathToClosestCoin.Count > 1 ? pathToClosestCoin : pathToFinish;
+                }
 
-            if (path != null && path.Count > 1)
-            {
-                Point bestMove = path[1];
-                Game.checkMovement(bestMove, true);
+                if (path != null && path.Count > 1)
+                {
+                    Point bestMove = path[1];
+                    Game.checkMovement(bestMove, true);
+                }
             }
             Invalidate();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+
+            if (e.KeyCode == Keys.O)
+            {
+                ResetGame();
+            }
+
             if (!isDisabled)
             {
                 Point newPosition = Game.Player.Position;
@@ -109,14 +134,20 @@ namespace MazeRace
                     case Keys.D:
                         newPosition.X += 1;
                         break;
+                    case Keys.P:
+                        PauseGame();
+                        break;
+                    case Keys.O:
+                        ResetGame();
+                        break;
                 }
-
                 Game.checkMovement(newPosition, false);
                 UpdateScores();
                 Invalidate();
             }
-
         }
+
+
 
         private void checkMovement(Point newPosition, bool isPC)
         {
@@ -142,7 +173,7 @@ namespace MazeRace
             Game.StartNextLevel();
             AdjustPanel();
 
-            if (Game.Level == 11)
+            if (Game.Level == 12)
             {
                 DialogResult result = MessageBox.Show("You have passed all 10 level! Start new game?", "Geme Over", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
@@ -153,7 +184,7 @@ namespace MazeRace
                 {
                     this.Close();
                 }
-               
+
             }
         }
 
@@ -169,8 +200,6 @@ namespace MazeRace
             int cellSize = 20;
             int mazeWidth = Game.maze.GetLength(1) * cellSize;
             int mazeHeight = Game.maze.GetLength(0) * cellSize;
-
-            // Calculate offsets to center the maze
             int offsetX = (ClientSize.Width - mazeWidth) / 2;
             int offsetY = (ClientSize.Height - mazeHeight) / 2;
 
@@ -201,7 +230,6 @@ namespace MazeRace
                 }
             }
 
-            // Draw players
             int playerDrawX = Game.Player.Position.X * cellSize + offsetX;
             int playerDrawY = Game.Player.Position.Y * cellSize + offsetY;
             g.FillEllipse(Brushes.Blue, playerDrawX, playerDrawY, cellSize, cellSize);
@@ -216,13 +244,10 @@ namespace MazeRace
             ssScore.Text = $"Player: {Game.Player.Score}    Computer: {Game.PC.Score}";
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void timerCounter_Tick(object sender, EventArgs e)
         {
+            lblPause.Text = "Paused";
+            lblPause.ForeColor = Color.Red;
             Countdown--;
             lblCountdown.Text = Countdown.ToString();
             Game.isDisabled = true;
@@ -233,9 +258,10 @@ namespace MazeRace
                 timerCounter.Stop();
                 Game.isDisabled = false;
                 isDisabled = false;
-
                 gameTimer.Tick += gameTimer_Tick;
                 gameTimer.Start();
+                lblPause.Text = "Playing";
+                lblPause.ForeColor = Color.DarkGreen;
             }
 
         }
@@ -282,6 +308,32 @@ namespace MazeRace
             StartNextLevel();
             panelStartMenu.Visible = false;
             this.Focus();
+        }
+
+        private void PauseGame()
+        {
+            isDisabled = true;
+            Game.isDisabled = true;
+            lblPause.Text = "Paused";
+            lblPause.ForeColor = Color.Red;
+        }
+
+        private void ResetGame()
+        {
+            isDisabled = false;
+            Game.isDisabled = false;
+            lblPause.Text = "Playing";
+            lblPause.ForeColor = Color.DarkGreen;
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
+       
+        }
+        private void Player_LoadCompleted(object sender, EventArgs e)
+        {
+            player.PlayLooping();
         }
     }
 }
