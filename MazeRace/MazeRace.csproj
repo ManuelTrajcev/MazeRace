@@ -89,6 +89,9 @@
   <ItemGroup>
     <Content Include="Icons\info-icon.jpg" />
     <Content Include="Resources\music.mp3" />
+    <None Include="Resources\off %281%29.png" />
+    <None Include="Resources\on %281%29.png" />
+    <None Include="Resources\on.png" />
     <None Include="Resources\info-icon-50-removebg.png" />
     <None Include="Resources\info-icon-50.jpg" />
     <None Include="Resources\info-image2.jpg" />

@@ -38,8 +38,9 @@
             this.ssScore = new System.Windows.Forms.Label();
             this.lblHighScore = new System.Windows.Forms.Label();
             this.lblPause = new System.Windows.Forms.Label();
-            this.lblInfo = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.lblInfo = new System.Windows.Forms.Label();
+            this.lblSound = new System.Windows.Forms.Label();
             this.panelStartMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,7 +64,7 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Press Start 2P", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.GreenYellow;
-            this.lblTitle.Location = new System.Drawing.Point(119, 227);
+            this.lblTitle.Location = new System.Drawing.Point(113, 313);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(575, 82);
             this.lblTitle.TabIndex = 0;
@@ -73,7 +74,7 @@
             // 
             this.btnNewGame.Font = new System.Drawing.Font("Press Start 2P", 12F);
             this.btnNewGame.ForeColor = System.Drawing.Color.Blue;
-            this.btnNewGame.Location = new System.Drawing.Point(258, 364);
+            this.btnNewGame.Location = new System.Drawing.Point(258, 461);
             this.btnNewGame.Name = "btnNewGame";
             this.btnNewGame.Size = new System.Drawing.Size(308, 58);
             this.btnNewGame.TabIndex = 1;
@@ -88,7 +89,7 @@
             this.panelStartMenu.Controls.Add(this.lblTitle);
             this.panelStartMenu.Location = new System.Drawing.Point(19, 60);
             this.panelStartMenu.Name = "panelStartMenu";
-            this.panelStartMenu.Size = new System.Drawing.Size(776, 543);
+            this.panelStartMenu.Size = new System.Drawing.Size(776, 587);
             this.panelStartMenu.TabIndex = 2;
             // 
             // lblLevel
@@ -138,6 +139,10 @@
             this.lblPause.TabIndex = 5;
             this.lblPause.Text = "Paused";
             // 
+            // toolTip1
+            // 
+            this.toolTip1.ToolTipTitle = "Controls:";
+            // 
             // lblInfo
             // 
             this.lblInfo.AutoSize = true;
@@ -148,19 +153,26 @@
             this.lblInfo.Size = new System.Drawing.Size(35, 32);
             this.lblInfo.TabIndex = 6;
             this.lblInfo.Text = "   ";
-            this.toolTip1.SetToolTip(this.lblInfo, "Controls:\r\nP - Pause\r\nO - Reset\r\nW,A,S,D - move");
-       
+            this.toolTip1.SetToolTip(this.lblInfo, "P - Pause/Play\r\nW,A,S,D - Move\r\nM - Turn music on/off\r\n\r\nCoin(Yellow) +20pts\r\nFin" +
+        "ish(Green) +10pts \r\n\r\n\r\n");
             // 
-            // toolTip1
+            // lblSound
             // 
-            this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.lblSound.AutoSize = true;
+            this.lblSound.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSound.Image = global::MazeRace.Properties.Resources.on__1_;
+            this.lblSound.Location = new System.Drawing.Point(773, 707);
+            this.lblSound.Name = "lblSound";
+            this.lblSound.Size = new System.Drawing.Size(94, 52);
+            this.lblSound.TabIndex = 7;
+            this.lblSound.Text = "      ";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
-            this.ClientSize = new System.Drawing.Size(921, 450);
+            this.ClientSize = new System.Drawing.Size(921, 759);
             this.Controls.Add(this.panelStartMenu);
             this.Controls.Add(this.lblCountdown);
             this.Controls.Add(this.lblLevel);
@@ -168,6 +180,7 @@
             this.Controls.Add(this.lblHighScore);
             this.Controls.Add(this.lblPause);
             this.Controls.Add(this.lblInfo);
+            this.Controls.Add(this.lblSound);
             this.Name = "Form1";
             this.Text = "Form1";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
@@ -190,6 +203,7 @@
         private System.Windows.Forms.Label lblPause;
         private System.Windows.Forms.Label lblInfo;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label lblSound;
     }
 }
 

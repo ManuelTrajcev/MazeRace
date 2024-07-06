@@ -25,11 +25,13 @@ namespace MazeRace
         private static MazeGenerator MazeGenerator = new MazeGenerator();
         private Game Game = null;
         public int Highscore = 0;
+        private bool isMusicOn = true;
+
         public Form1()
         {
             InitializeComponent();
             StartMusic();
-         
+
             //            LoadArcadeFont();
             //            ApplyArcadeFont(this.Controls);
 
@@ -76,7 +78,9 @@ namespace MazeRace
             lblHighScore.Top = this.Height - (int)(4.5 * ssScore.Height);
             lblHighScore.Left = (this.Width - lblHighScore.Width) / 2;
             lblPause.Top = 10;
-            lblPause.Left = this.Width - lblPause.Width - 26;
+            lblPause.Left = this.Width - lblPause.Width - 27;
+            lblSound.Left = this.Width - lblPause.Width - 7;
+            lblSound.Top = 30;
             lblInfo.Left = 10;
             lblInfo.Top = 10;
         }
@@ -112,9 +116,30 @@ namespace MazeRace
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
 
-            if (e.KeyCode == Keys.O)
+            if (e.KeyCode == Keys.P)
             {
-                ResetGame();
+                if (isDisabled)
+                {
+                    ResetGame();
+                }
+                else
+                {
+                    PauseGame();
+                }
+            }
+            if (e.KeyCode == Keys.M)
+            {
+                if (isMusicOn)
+                {
+                    player.Stop();
+                    lblSound.Image = Properties.Resources.off__1_;
+                }
+                else
+                {
+                    player.Play();
+                    lblSound.Image = Properties.Resources.on__1_;
+                }
+                isMusicOn = !isMusicOn;
             }
 
             if (!isDisabled)
@@ -133,12 +158,6 @@ namespace MazeRace
                         break;
                     case Keys.D:
                         newPosition.X += 1;
-                        break;
-                    case Keys.P:
-                        PauseGame();
-                        break;
-                    case Keys.O:
-                        ResetGame();
                         break;
                 }
                 Game.checkMovement(newPosition, false);
@@ -168,10 +187,8 @@ namespace MazeRace
             timerCounter.Start();
             gameTimer = new Timer();
             lblLevel.Text = $"Level {Game.Level}";
-            Game.PCSpeed -= 75;
             gameTimer.Interval = Game.PCSpeed;
             Game.StartNextLevel();
-            AdjustPanel();
 
             if (Game.Level == 12)
             {
@@ -184,8 +201,8 @@ namespace MazeRace
                 {
                     this.Close();
                 }
-
             }
+            AdjustPanel();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -300,6 +317,7 @@ namespace MazeRace
 
         private void StartNewGame()
         {
+            AdjustPanel();
             Countdown = 4;
             Game = new Game();
             Game.OnLevelCompleted += StartNextLevel;
@@ -329,7 +347,6 @@ namespace MazeRace
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
-       
         }
         private void Player_LoadCompleted(object sender, EventArgs e)
         {
