@@ -27,9 +27,8 @@
 <img width="437" alt="Level finished" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/d18b3d91-290e-420d-9225-88084670332f"> <br>
 MessageBox откако некој ќе стигне до целта.
 
-
-
-<img width="429" alt="Info Tool Tip" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/8edcda0e-a100-420c-8b0a-52a23f62713a">
+### Info Tool Tip
+<img width="429" alt="Info Tool Tip" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/8edcda0e-a100-420c-8b0a-52a23f62713a"> <br>
 Кога со глувчето се поместиме над Info Tool Tip се појавува прозорец со контролите за играта.
 
 На средината на екранот се наоѓа лавиринтот низ кој се движат играчите. Над него го пишува моменталното ниво. Во левиот горен кјош се наоѓа Info Tool Tip, во десниот пишува дали играта е паузирана или не. На левата страна долу има игона која покажува дали музиката е вклучена/исклучена. Најдолу на екранот е прикажан Highscore(oд до сега изиграните игри), а под него резултатот од тековната игра.
