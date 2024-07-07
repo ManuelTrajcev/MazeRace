@@ -1,6 +1,6 @@
 ﻿namespace MazeRace
 {
-    partial class Form1
+    partial class MazeRace
     {
         /// <summary>
         /// Required designer variable.
@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MazeRace));
             this.timerCounter = new System.Windows.Forms.Timer(this.components);
             this.lblCountdown = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
@@ -89,7 +90,7 @@
             this.panelStartMenu.Controls.Add(this.lblTitle);
             this.panelStartMenu.Location = new System.Drawing.Point(19, 60);
             this.panelStartMenu.Name = "panelStartMenu";
-            this.panelStartMenu.Size = new System.Drawing.Size(776, 587);
+            this.panelStartMenu.Size = new System.Drawing.Size(890, 687);
             this.panelStartMenu.TabIndex = 2;
             // 
             // lblLevel
@@ -161,13 +162,13 @@
             this.lblSound.AutoSize = true;
             this.lblSound.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSound.Image = global::MazeRace.Properties.Resources.on__1_;
-            this.lblSound.Location = new System.Drawing.Point(773, 707);
+            this.lblSound.Location = new System.Drawing.Point(801, 56);
             this.lblSound.Name = "lblSound";
             this.lblSound.Size = new System.Drawing.Size(94, 52);
             this.lblSound.TabIndex = 7;
             this.lblSound.Text = "      ";
             // 
-            // Form1
+            // MazeRace
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -181,8 +182,9 @@
             this.Controls.Add(this.lblPause);
             this.Controls.Add(this.lblInfo);
             this.Controls.Add(this.lblSound);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "MazeRace";
+            this.Text = "MazeRace";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.panelStartMenu.ResumeLayout(false);
             this.panelStartMenu.PerformLayout();

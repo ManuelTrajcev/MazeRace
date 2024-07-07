@@ -85,8 +85,15 @@ namespace MazeRace
 
         private void PlaceFinish(int[,] maze)
         {
-            int finishX = random.Next(5, width - 5);
-            int finishY = random.Next(5, height - 5);
+            int finishX;
+            int finishY;
+            while (true)
+            {
+                 finishX = random.Next(5, width - 5);
+                 finishY = random.Next(5, height - 5);
+                if(maze[finishX, finishY] == wall) break;
+            }
+            
             maze[finishY, finishX] = finish;
         }
 
