@@ -132,11 +132,11 @@
             // 
             this.lblPause.AutoSize = true;
             this.lblPause.BackColor = System.Drawing.Color.Transparent;
-            this.lblPause.Font = new System.Drawing.Font("Press Start 2P", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPause.Font = new System.Drawing.Font("Press Start 2P", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPause.ForeColor = System.Drawing.Color.Red;
             this.lblPause.Location = new System.Drawing.Point(777, 9);
             this.lblPause.Name = "lblPause";
-            this.lblPause.Size = new System.Drawing.Size(132, 27);
+            this.lblPause.Size = new System.Drawing.Size(120, 25);
             this.lblPause.TabIndex = 5;
             this.lblPause.Text = "Paused";
             // 
