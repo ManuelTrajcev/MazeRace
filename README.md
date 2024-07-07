@@ -16,13 +16,15 @@
 ###2.3 Кориснички интерфејс
 
 ### Стартно мени 
-<img width="436" alt="Start Menu" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/0ca21b2d-6c96-472c-b8d6-98577b1f937c">
+<img width="436" alt="Start Menu" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/0ca21b2d-6c96-472c-b8d6-98577b1f937c"> <br>
 Со притискање на на копчето "Start Game" започнува играта
 
-<img width="437" alt="In game" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/f25e5fff-3cb2-4f8d-8d88-73949c87aba4">
+### Екранот за време на играта
+<img width="437" alt="In game" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/f25e5fff-3cb2-4f8d-8d88-73949c87aba4"> <br>
 Приказ на екранот за време на игра.
 
-<img width="437" alt="Level finished" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/d18b3d91-290e-420d-9225-88084670332f">
+### Екранот кога некој од играчите ќе стигне до целта
+<img width="437" alt="Level finished" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/d18b3d91-290e-420d-9225-88084670332f"> <br>
 MessageBox откако некој ќе стигне до целта.
 
 
