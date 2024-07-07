@@ -18,7 +18,6 @@ namespace MazeRace
             int cols = maze.GetLength(1);
             bool[,] visited = new bool[rows, cols];
             Point[,] previous = new Point[rows, cols];
-
             Queue<Point> queue = new Queue<Point>();
             queue.Enqueue(start);
             visited[start.Y, start.X] = true;
@@ -43,8 +42,7 @@ namespace MazeRace
                     }
                 }
             }
-
-            return new List<Point>(); // No path found
+            return new List<Point>(); 
         }
 
         private static bool IsValidMove(int[,] maze, int row, int col, bool[,] visited)

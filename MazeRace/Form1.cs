@@ -15,7 +15,7 @@ using WMPLib;
 
 namespace MazeRace
 {
-    public partial class Form1 : Form
+    public partial class MazeRace : Form
     {
         private PrivateFontCollection arcadeFontCollection;
         private int Countdown;
@@ -27,14 +27,12 @@ namespace MazeRace
         public int Highscore = 0;
         private bool isMusicOn = true;
 
-        public Form1()
+        public MazeRace()
         {
             InitializeComponent();
             StartMusic();
-
-            //            LoadArcadeFont();
-            //            ApplyArcadeFont(this.Controls);
-
+            //LoadArcadeFont();
+            //ApplyArcadeFont(this.Controls);
             int screenWidth = Screen.PrimaryScreen.Bounds.Width;
             int screenHeight = Screen.PrimaryScreen.Bounds.Height;
             int formWidth = this.Width;
