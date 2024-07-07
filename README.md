@@ -32,3 +32,44 @@ MessageBox откако некој ќе стигне до целта.
 Кога со глувчето се поместиме над Info Tool Tip се појавува прозорец со контролите за играта.
 
 На средината на екранот се наоѓа лавиринтот низ кој се движат играчите. Над него го пишува моменталното ниво. Во левиот горен кјош се наоѓа Info Tool Tip, во десниот пишува дали играта е паузирана или не, а под тоа има икона која покажува дали музиката е вклучена/исклучена. Најдолу на екранот е прикажан Highscore(oд до сега изиграните игри), а под него резултатот од тековната игра.
+
+## 3.Решение на проблемот
+  Во играта освен класата Form постојат уште четири класи: Game, Player, MazeGenerator и MazeSolver.
+### 3.1 Податочни структури/класи
+
+### Form
+<img width="420" alt="Form" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/be37c74c-fe7b-4edc-933e-e67b1d6eb8a8"><br>
+  Основната класа за формата во која се чуваат податоци за дизајн-елементите, тајмер, SoundPlayer за музиката во поаздина и објект од играта - Game.
+### Game
+  <img width="450" alt="Game" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/c523d5fb-03d4-464c-88c9-69e18efeff0d"><br>
+  Главната класа во која е имплементирана логиката на играта. Содржи два објекти Player за играчите, лавиринтот се чува како матрица геенерирана од MazeGenerator.
+### Player
+<img width="335" alt="Player" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/103d81a2-6bf3-4a8b-9ff8-5d06b1f8fba1"><br>
+  Класа за играч во која се чуваат информации за позицијата и поените на еден играч.
+### MazeGenerator
+<img width="343" alt="MazeGenerator" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/8c4b4b29-735a-41ef-9405-03ec857c89ad"><br>
+  Оваа класа содржи методи за генерирање на лавиринт. 
+### MazeSolver
+<img width="409" alt="MazeSolver" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/992d1b71-0a38-4152-9a8a-42a294ea6821"><br>
+  Класа која се корист за пронаоѓање на патот до целта или патот до една паричка во лавиринтото. Ова овозможува да се најде патот по кој треба да се движи играчот управуван од компјутерот.
+
+### 3.1.Генерирање на лавиринт
+  Лавиринтот на секое ниво се генерира со помош на класата MazeGenerator. Креирањето на еден лавиринт се извршува во неколку чекори:
+  <img width="295" alt="MazeGenerator" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/aea566f0-7788-46c2-b5e2-1ec4e03a0275"><br>
+####  3.1.1. Иницијализација 
+<img width="295" alt="InitializeMaze" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/6779fbf3-1082-4053-a24d-f17521000023"><br>
+  Најпрво се иницјализира лавиринтот како на секое поле да содржи ѕид.
+#### 3.1.2 Генерирање на пат
+<img width="291" alt="Screenshot_13" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/9d64f8cc-21a3-4e93-9bd8-fd332dc4d33f"><br>
+  Генерирањето на птиштата во лавиринтот се прави со помош на алгоритмот за пребарување по длабочина. Се започнува од полето (1,1) каде се наоѓа стартот и се избира случајно друго поле до кое се креира пат. Како помошни методи се користат GetUnvisitedNeighbors и RemoveWall.
+  <img width="372" alt="GeneratePath" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/f690c9e4-b148-4976-9327-98db2a3d3c57"><br>
+#### 3.1.3 Позиционирање на целта
+<img width="224" alt="PlaceFinish" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/3864ca63-fadf-473e-88c9-a2295e571136"><br>
+  Целта се поставува слуајно на поле кое е ѕид (за да може да се заобиколи доколку играчот сака да се упати кон некоја паршика), во средишниот дел од лавиринтот.
+#### 3.1.4 Додавање парички
+<img width="224" alt="PlaceCoins" src="https://github.com/ManuelTrajcev/MazeRace/assets/119582620/bd781391-eb1e-4ecc-a76f-50be54a37674"><br>
+  Паричките се поставуваат на случајно избрани позиции до кои може да стигне играчот (не се ѕид).
+
+
+
+
