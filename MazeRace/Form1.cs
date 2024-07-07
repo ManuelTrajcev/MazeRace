@@ -58,7 +58,6 @@ namespace MazeRace
             player.LoadCompleted += Player_LoadCompleted;
             player.LoadAsync();
         }
-
         private void AdjustPanel()
         {
             panelStartMenu.Width = this.Width;
@@ -84,7 +83,6 @@ namespace MazeRace
             lblInfo.Left = 10;
             lblInfo.Top = 10;
         }
-
         private void gameTimer_Tick(object sender, EventArgs e)
         {
             if (!isDisabled)
@@ -112,10 +110,8 @@ namespace MazeRace
             }
             Invalidate();
         }
-
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-
             if (e.KeyCode == Keys.P)
             {
                 if (isDisabled)
@@ -165,9 +161,6 @@ namespace MazeRace
                 Invalidate();
             }
         }
-
-
-
         private void checkMovement(Point newPosition, bool isPC)
         {
             Game.Player.Move(newPosition);
@@ -225,24 +218,28 @@ namespace MazeRace
                 for (int x = 0; x < Game.maze.GetLength(1); x++)
                 {
                     Brush brush;
+                    int drawX = x * cellSize + offsetX;
+                    int drawY = y * cellSize + offsetY;
+
                     switch (Game.maze[y, x])
                     {
                         case 1:
                             brush = Brushes.Black;  // Wall
+                            g.FillRectangle(brush, drawX, drawY, cellSize, cellSize);
                             break;
                         case 2:
                             brush = Brushes.Gold;   // Coin
+                            g.FillEllipse(brush, drawX, drawY, cellSize, cellSize);
                             break;
                         case 3:
                             brush = Brushes.Green;  // Finish
+                            g.FillRectangle(brush, drawX, drawY, cellSize, cellSize);
                             break;
                         default:
                             brush = Brushes.White;  // Path
+                            g.FillRectangle(brush, drawX, drawY, cellSize, cellSize);
                             break;
                     }
-                    int drawX = x * cellSize + offsetX;
-                    int drawY = y * cellSize + offsetY;
-                    g.FillRectangle(brush, drawX, drawY, cellSize, cellSize);
                     g.DrawRectangle(Pens.Black, drawX, drawY, cellSize, cellSize);
                 }
             }
@@ -280,7 +277,6 @@ namespace MazeRace
                 lblPause.Text = "Playing";
                 lblPause.ForeColor = Color.DarkGreen;
             }
-
         }
         private void LoadArcadeFont()
         {
