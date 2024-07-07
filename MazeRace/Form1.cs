@@ -75,8 +75,8 @@ namespace MazeRace
             lblHighScore.Top = this.Height - (int)(4.5 * ssScore.Height);
             lblHighScore.Left = (this.Width - lblHighScore.Width) / 2;
             lblPause.Top = 10;
-            lblPause.Left = this.Width - lblPause.Width - 27;
-            lblSound.Left = this.Width - lblPause.Width - 7;
+            lblPause.Left = this.Width - lblPause.Width - 24;
+            lblSound.Left = this.Width - lblPause.Width + 10;
             lblSound.Top = 30;
             lblInfo.Left = 10;
             lblInfo.Top = 10;
@@ -106,6 +106,7 @@ namespace MazeRace
                     Game.checkMovement(bestMove, true);
                 }
             }
+            UpdateScores();
             Invalidate();
         }
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -168,21 +169,11 @@ namespace MazeRace
 
         public void StartNextLevel()
         {
-            if (Game.Player.Score > Highscore)
+            if (Game.Level == 11)
             {
-                Highscore = Game.Player.Score;
-            }
-            lblHighScore.Text = $"Highscore: {Highscore}";
-            gameTimer.Stop();
-            isDisabled = true;
-            timerCounter.Start();
-            gameTimer = new Timer();
-            lblLevel.Text = $"Level {Game.Level}";
-            gameTimer.Interval = Game.PCSpeed;
-            Game.StartNextLevel();
-
-            if (Game.Level == 12)
-            {
+                isDisabled = true;
+                Game.isDisabled = true;
+                gameTimer.Stop();
                 DialogResult result = MessageBox.Show("You have passed all 10 level! Start new game?", "Geme Over", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
@@ -193,6 +184,22 @@ namespace MazeRace
                     this.Close();
                 }
             }
+            else
+            {
+                if (Game.Player.Score > Highscore)
+                {
+                    Highscore = Game.Player.Score;
+                }
+                lblHighScore.Text = $"Highscore: {Highscore}";
+                gameTimer.Stop();
+                isDisabled = true;
+                timerCounter.Start();
+                gameTimer = new Timer();
+                lblLevel.Text = $"Level {Game.Level}";
+                gameTimer.Interval = Game.PCSpeed;
+                Game.StartNextLevel();
+            }
+           
             AdjustPanel();
         }
 
@@ -253,7 +260,7 @@ namespace MazeRace
 
         private void UpdateScores()
         {
-            ssScore.Text = $"Player: {Game.Player.Score}    Computer: {Game.PC.Score}";
+            ssScore.Text = $"Player: {Game.Player.Score}   Computer: {Game.PC.Score}";
         }
 
         private void timerCounter_Tick(object sender, EventArgs e)

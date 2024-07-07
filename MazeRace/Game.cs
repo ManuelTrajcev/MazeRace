@@ -22,7 +22,7 @@ namespace MazeRace
         public event Action OnLevelCompleted;
         public Game()
         {
-            PCSpeed = 575;
+            PCSpeed = 450;
             Player = new Player(new Point(1, 1));
             PC = new Player(new Point(1, 1));
             isDisabled = true;
@@ -62,7 +62,7 @@ namespace MazeRace
             {
                 if (maze[newPosition.Y, newPosition.X] == 2)
                 {
-                    Player.UpdateScore(10);
+                    Player.UpdateScore(20);
                     maze[newPosition.Y, newPosition.X] = 0;
                     coins.Remove(newPosition);
                 }
@@ -86,11 +86,11 @@ namespace MazeRace
         public void StartNextLevel()
         {
             Level++;
-            PCSpeed -= 50;
+            PCSpeed -= 40;
             PC.setPosition(new Point(1, 1));
             Player.setPosition(new Point(1, 1));
             coins = new List<Point>();
-            maze = MazeGenerator.GenerateMaze(Level-1);
+            maze = MazeGenerator.GenerateMaze(2*Level-1);
             for (int y = 0; y < maze.GetLength(0); y++)
             {
                 for (int x = 0; x < maze.GetLength(1); x++)
